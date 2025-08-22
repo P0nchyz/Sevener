@@ -1,11 +1,18 @@
-<script setup></script>
+<script setup>
+import LoginPage from './LoginPage.vue';
+import MainPage from './MainPage.vue';
+
+import { useMainStore } from './stores/mainStore';
+
+const mainStore = useMainStore();
+
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div>
+    <LoginPage v-if="!mainStore.isLogged"/>
+    <MainPage v-else/>
+  </div>
 </template>
 
 <style scoped></style>
