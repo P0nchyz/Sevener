@@ -20,7 +20,7 @@ const { players, selectedPlayerId } = storeToRefs(store);
         </thead>
         <tbody>
           <tr v-for="player in players" @click="selectPlayer(player.id)">
-            <td class="p-2" :class="(player.id === selectedPlayerId) ? 'bg-red-500' : ''">{{ player.name }}</td>
+            <td class="p-2" :class="(player.id === selectedPlayerId)">{{ player.name }}</td>
           </tr>
         </tbody>
       </table>
@@ -34,7 +34,7 @@ const { players, selectedPlayerId } = storeToRefs(store);
         </thead>
         <tbody>
           <tr v-for="player in players">
-            <td v-for="score in player.scores" class="p-2">{{ score }}</td>
+            <td v-for="i in store.currentRound" class="p-2">{{ player.scores[i - 1] || '&nbsp' }}</td>
           </tr>
         </tbody>
       </table>
