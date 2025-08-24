@@ -1,12 +1,13 @@
 <script setup>
-import { useMainStore } from '@/stores/mainStore';
+import { useStore } from '@/stores/store';
 
-const mainStore = useMainStore();
+const store = useStore();
 
 </script>
 
 <template>
-  <div class="border-black">
-    <input type="text" name="UserName" id="UserName" v-model="mainStore.myId" placeholder="What's your name?">
+  <div class="border-black border-2 rounded-md p-8">
+    <input type="text" name="UserName" id="UserName" v-model="store.myName" placeholder="What's your name?"
+      class="p-2">
   </div>
 </template>

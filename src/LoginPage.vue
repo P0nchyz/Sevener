@@ -1,5 +1,9 @@
 <script setup>
+import NewRoom from './components/NewRoom.vue';
 import UserDataSettings from './components/UserDataSettings.vue';
+import { useStore } from './stores/store';
+
+const store = useStore();
 
 </script>
 
@@ -10,5 +14,6 @@ import UserDataSettings from './components/UserDataSettings.vue';
   </header>
   <main class="flex flex-col items-center mt-20">
     <UserDataSettings />
+    <NewRoom/>
   </main>
 </template>

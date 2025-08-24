@@ -2,16 +2,16 @@
 import LoginPage from './LoginPage.vue';
 import MainPage from './MainPage.vue';
 
-import { useMainStore } from './stores/mainStore';
+import { useStore } from './stores/store';
 
-const mainStore = useMainStore();
+const store = useStore();
 
 </script>
 
 <template>
   <div>
-    <LoginPage v-if="!mainStore.isLogged"/>
-    <MainPage v-else/>
+    <LoginPage v-if="!store.isLogged" />
+    <MainPage v-else />
   </div>
 </template>
 

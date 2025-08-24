@@ -1,10 +1,12 @@
 <script setup>
-import { useMainStore } from '@/stores/mainStore';
+import { useStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
 
-const mainStore = useMainStore();
+const store = useStore();
 
-const { players } = storeToRefs(mainStore);
+const { selectPlayer } = store;
+
+const { players, selectedPlayerId } = storeToRefs(store);
 </script>
 
 <template>
@@ -17,8 +19,8 @@ const { players } = storeToRefs(mainStore);
           </tr>
         </thead>
         <tbody>
-          <tr v-for="player in players">
-            <td class="p-2">{{ player.name }}</td>
+          <tr v-for="player in players" @click="selectPlayer(player.id)">
+            <td class="p-2" :class="(player.id === selectedPlayerId) ? 'bg-red-500' : ''">{{ player.name }}</td>
           </tr>
         </tbody>
       </table>
@@ -27,7 +29,7 @@ const { players } = storeToRefs(mainStore);
       <table>
         <thead>
           <tr>
-            <th v-for="i in mainStore.currentRound" class="p-2">{{ i }}</th>
+            <th v-for="i in store.currentRound" class="p-2">{{ i }}</th>
           </tr>
         </thead>
         <tbody>
