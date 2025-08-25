@@ -2,7 +2,7 @@
 import { useStore } from '@/stores/store';
 import Card from './Card.vue';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 
 const store = useStore();
 
@@ -12,9 +12,24 @@ const { selectedPlayerId, currentRound } = storeToRefs(store);
 
 const playedCards = ref([]);
 
+const playedCardsContainer = ref(null);
+
 const addCard = (cardVal) => {
   if (playedCards.value.includes(cardVal)) return;
   playedCards.value.push(cardVal);
+
+  nextTick(() => {
+    if (playedCardsContainer.value) {
+      playedCardsContainer.value.scrollTo({
+        left: playedCardsContainer.value.scrollWidth,
+        behavior: "smooth",
+      });
+    }
+  })
+}
+
+const removeCard = (cardVal) => {
+  playedCards.value = playedCards.value.filter(n => n !== cardVal);
 }
 
 const isNumberCard = (cardVal) => {
@@ -40,20 +55,28 @@ const roundScore = computed(calculateScore);
 </script>
 
 <template>
-  <div v-if="selectedPlayerId" class="absolute max-w-fit bottom-0 translate-x-[-50%] left-1/2 w-max">
-    <div class="flex justify-between">
-      <div class="flex grow flex-col">
-        <div v-if="selectedPlayerId">{{ getPlayerById(selectedPlayerId).name }}</div>
-        <div class=" flex w-full max-w-[300px] flex-nowrap overflow-x-scroll">
-          <Card class="shrink-0" v-for="card in playedCards">{{ card }}</Card>
+  <div v-if="selectedPlayerId" class="absolute bottom-0 translate-x-[-50%] left-1/2 w-max  text-white">
+    <div class="flex justify-baseline">
+      <div class="flex flex-col justify-end">
+        <div class="w-fit p-2 rounded-t-2xl border-b-0 border-red-600 border-2 grow text-red-600 font-semibold" v-if="selectedPlayerId">{{ getPlayerById(selectedPlayerId).name }}
+        </div>
+        <div ref="playedCardsContainer"
+          class="flex w-[300px] pt-4 min-h-[83px] flex-nowrap overflow-x-scroll bg-zinc-800">
+          <Card class="shrink-0" @click="removeCard(card)" v-for="card in playedCards">{{ card }}</Card>
         </div>
       </div>
-      <div>
-        <div>Round</div>
-        <div>{{ roundScore }}Points</div>
+      <div class="grow px-4 bg-zinc-800 rounded-t-2xl">
+        <div class="pt-2">
+          <nav class="inline-block text-sm text-gray-400 mr-1">Round</nav>
+          <nav class="inline-block text-xl">{{ store.currentRound }}</nav>
+        </div>
+        <div class="h-[83px] pt-4">
+          <span class="text-xl">{{ roundScore }}</span>
+          <span class="text-sm text-gray-400 ml-1">Points</span>
+        </div>
       </div>
     </div>
-    <div class="flex justify-around gap-8">
+    <div class="flex justify-around gap-8 p-4 bg-zinc-800">
       <div class="grid grid-cols-4 justify-items-center">
         <Card @click="addCard('1')">1</Card>
         <Card @click="addCard('2')">2</Card>
@@ -84,9 +107,20 @@ const roundScore = computed(calculateScore);
         <div>
           <button @click="playedCards.length = 0"
             class="p-2 m-2 border-1 border-red-600 text-red-600 rounded-md">CLEAR</button>
-          <button @click="setPlayerScore(selectedPlayerId, currentRound, roundScore); playedCards.length = 0" class="p-2 m-2 border-1 border-green-600 text-green-600 rounded-md">GO</button>
+          <button @click="setPlayerScore(selectedPlayerId, currentRound, roundScore); playedCards.length = 0"
+            class="p-2 m-2 border-1 border-green-600 text-green-600 rounded-md">GO</button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@media (pointer: fine) {
+
+  *::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+}
+</style>

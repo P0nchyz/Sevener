@@ -1,12 +1,26 @@
 <script setup>
 import { useStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
+import { ref, nextTick, watch } from 'vue';
 
 const store = useStore();
 
 const { selectPlayer } = store;
 
-const { players, selectedPlayerId } = storeToRefs(store);
+const { players, selectedPlayerId, currentRound } = storeToRefs(store);
+
+const scrollContainer = ref(null);
+
+watch(currentRound, () => {
+  nextTick(() => {
+    if (scrollContainer.value) {
+      scrollContainer.value.scrollTo({
+        left: scrollContainer.value.scrollWidth,
+        behavior: "smooth",
+      });
+    }
+  })
+})
 </script>
 
 <template>
@@ -25,16 +39,16 @@ const { players, selectedPlayerId } = storeToRefs(store);
         </tbody>
       </table>
     </div>
-    <div class="mx-8 overflow-x-auto">
+    <div ref="scrollContainer" class="mx-8 overflow-x-auto">
       <table>
         <thead>
           <tr>
-            <th v-for="i in store.currentRound" class="p-2">{{ i }}</th>
+            <th v-for="i in currentRound" class="p-2">{{ i }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="player in players">
-            <td v-for="i in store.currentRound" class="p-2">{{ player.scores[i - 1] || '&nbsp' }}</td>
+            <td v-for="i in store.currentRound" class="p-2">{{ player.scores[i-1] !== 0 ? (player.scores[i - 1] || '&nbsp') : '0' }}</td>
           </tr>
         </tbody>
       </table>
