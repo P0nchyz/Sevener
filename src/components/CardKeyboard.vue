@@ -40,12 +40,12 @@ const roundScore = computed(calculateScore);
 </script>
 
 <template>
-  <div v-if="selectedPlayerId" class="absolute bottom-0 translate-x-[-50%] left-1/2 w-max">
+  <div v-if="selectedPlayerId" class="absolute max-w-fit bottom-0 translate-x-[-50%] left-1/2 w-max">
     <div class="flex justify-between">
-      <div class="">
+      <div class="flex grow flex-col">
         <div v-if="selectedPlayerId">{{ getPlayerById(selectedPlayerId).name }}</div>
-        <div>
-          <Card v-for="card in playedCards">{{ card }}</Card>
+        <div class=" flex w-full max-w-[300px] flex-nowrap overflow-x-scroll">
+          <Card class="shrink-0" v-for="card in playedCards">{{ card }}</Card>
         </div>
       </div>
       <div>

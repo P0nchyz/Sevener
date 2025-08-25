@@ -11,6 +11,8 @@ export const useStore = defineStore('store', () => {
     () => users.value.find((u) => u.id === myId.value) || null
   );
 
+  const targetScore = ref(200);
+
   const currentRound = ref(0);
   const users = ref([]);
   const players = computed(() => users.value.flatMap((user) => user.players));
@@ -100,8 +102,37 @@ export const useStore = defineStore('store', () => {
     }
   }
 
-  function completeRound () {
+  function completeRound() {
+    if (getWinners().length !== 0) {
+      currentRound.value = 0;
+      return;
+    }
+
     currentRound.value++;
+  }
+
+  function getWinners() {
+    const playersWithTotals = players.value.map((player) => ({
+      ...player,
+      total: player.scores.reduce((acc, cur) => acc + cur, 0),
+    }));
+
+    const aboveTargetScore = playersWithTotals.filter(
+      (player) => player.total >= targetScore.value
+    );
+
+    if (aboveTargetScore.length === 0) return [];
+
+    const highestScore = Math.max(...aboveTargetScore.map((p) => p.total));
+
+    return aboveTargetScore.filter((player) => player.total === highestScore);
+  }
+
+  function resetGame() {
+    players.value.forEach((player) => {
+      player.scores = [];
+    });
+    currentRound.value = 1;
   }
 
   function generateId() {
@@ -126,6 +157,8 @@ export const useStore = defineStore('store', () => {
     selectPlayer,
     getPlayerById,
     setPlayerScore,
+    getWinners,
+    resetGame,
     generateId,
   };
 });
