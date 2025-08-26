@@ -56,6 +56,12 @@ export const useStore = defineStore('store', () => {
     }
   }
 
+  function removePlayer(playerId) {
+    for (const user of users.value) {
+      user.players = user.players.filter((p) => p.id !== playerId);
+    }
+  }
+
   function newRoom() {
     if (myName.value === '') {
       alert('Please write your name');
@@ -152,6 +158,7 @@ export const useStore = defineStore('store', () => {
     players,
     addPlayer,
     renamePlayer,
+    removePlayer,
     newRoom,
     selectedPlayerId,
     selectPlayer,

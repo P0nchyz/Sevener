@@ -6,7 +6,7 @@ import { ref, nextTick } from 'vue';
 
 const store = useStore();
 
-const { myId, addPlayer, generateId } = store;
+const { myId, addPlayer, generateId, removePlayer } = store;
 
 const { players } = storeToRefs(store);
 
@@ -32,7 +32,7 @@ const handleAddPlayer = () => {
           <span v-for="player in players" :key="player.id" class="flex justify-between">
             <input type="text" name="" id="" v-model="player.name" :ref="el => inputRefs[player.id] = el"
               class="fit-cont">
-            <button class="text-red-500">x</button>
+            <button @click="removePlayer(player.id)" class="text-red-500">x</button>
           </span>
         </div>
         <div class="flex flex-col">

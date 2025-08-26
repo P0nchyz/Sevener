@@ -34,7 +34,7 @@ watch(currentRound, () => {
         </thead>
         <tbody>
           <tr v-for="player in players" @click="selectPlayer(player.id)">
-            <td class="p-2" :class="(player.id === selectedPlayerId)">{{ player.name }}</td>
+            <td class="p-2" :class="(player.id === selectedPlayerId) ? 'bg-gray-300' : ''">{{ player.name }}</td>
           </tr>
         </tbody>
       </table>
