@@ -58,11 +58,12 @@ const roundScore = computed(calculateScore);
   <div v-if="selectedPlayerId" class="absolute bottom-0 translate-x-[-50%] left-1/2 w-max  text-white">
     <div class="flex justify-baseline">
       <div class="flex flex-col justify-end">
-        <div class="w-fit p-2 rounded-t-2xl border-b-0 border-red-600 border-2 grow text-red-600 font-semibold" v-if="selectedPlayerId">{{ getPlayerById(selectedPlayerId).name }}
+        <div class="w-fit p-2 rounded-t-2xl border-b-0 border-red-600 border-2 grow text-red-600 font-semibold"
+          v-if="selectedPlayerId">{{ getPlayerById(selectedPlayerId).name }}
         </div>
         <div ref="playedCardsContainer"
           class="flex w-[300px] pt-4 min-h-[83px] flex-nowrap overflow-x-scroll bg-zinc-800">
-          <Card class="shrink-0" @click="removeCard(card)" v-for="card in playedCards">{{ card }}</Card>
+          <Card class="shrink-0" @click="removeCard(card)" v-for="card in playedCards" :card-val="card" />
         </div>
       </div>
       <div class="grow px-4 bg-zinc-800 rounded-t-2xl">
@@ -78,31 +79,31 @@ const roundScore = computed(calculateScore);
     </div>
     <div class="flex justify-around gap-8 p-4 bg-zinc-800">
       <div class="grid grid-cols-4 justify-items-center">
-        <Card @click="addCard('1')">1</Card>
-        <Card @click="addCard('2')">2</Card>
-        <Card @click="addCard('3')">3</Card>
-        <Card @click="addCard('4')">4</Card>
-        <Card @click="addCard('5')">5</Card>
-        <Card @click="addCard('6')">6</Card>
-        <Card @click="addCard('7')">7</Card>
-        <Card @click="addCard('8')">8</Card>
-        <Card @click="addCard('9')">9</Card>
-        <Card @click="addCard('10')">10</Card>
-        <Card @click="addCard('11')">11</Card>
-        <Card @click="addCard('12')">12</Card>
-        <Card @click="addCard('0')" class="col-span-4">0</Card>
+        <Card @click="addCard('1')" card-val="1" />
+        <Card @click="addCard('2')" card-val="2" />
+        <Card @click="addCard('3')" card-val="3" />
+        <Card @click="addCard('4')" card-val="4" />
+        <Card @click="addCard('5')" card-val="5" />
+        <Card @click="addCard('6')" card-val="6" />
+        <Card @click="addCard('7')" card-val="7" />
+        <Card @click="addCard('8')" card-val="8" />
+        <Card @click="addCard('9')" card-val="9" />
+        <Card @click="addCard('10')" card-val="10" />
+        <Card @click="addCard('11')" card-val="11" />
+        <Card @click="addCard('12')" card-val="12" />
+        <Card @click="addCard('0')" class="col-span-4" card-val="0" />
       </div>
       <div class="flex flex-col">
         <div class="grid grid-cols-3">
-          <Card @click="addCard('+2')">+2</Card>
-          <Card @click="addCard('+4')">+4</Card>
-          <Card @click="addCard('+6')">+6</Card>
-          <Card @click="addCard('+8')">+8</Card>
-          <Card @click="addCard('+10')">+10</Card>
-          <Card @click="addCard('x2')">x2</Card>
-          <Card @click="addCard('F')">F</Card>
-          <Card @click="addCard('D')">D</Card>
-          <Card @click="addCard('SC')">SC</Card>
+          <Card @click="addCard('+2')" card-val="+2" />
+          <Card @click="addCard('+4')" card-val="+4" />
+          <Card @click="addCard('+6')" card-val="+6" />
+          <Card @click="addCard('+8')" card-val="+8" />
+          <Card @click="addCard('+10')" card-val="+10" />
+          <Card @click="addCard('x2')" card-val="x2" />
+          <Card @click="addCard('F')" card-val="F" />
+          <Card @click="addCard('D')" card-val="D" />
+          <Card @click="addCard('SC')" card-val="SC" />
         </div>
         <div>
           <button @click="playedCards.length = 0"
