@@ -16,6 +16,7 @@ export const useStore = defineStore('store', () => {
   const currentRound = ref(0);
   const users = ref([]);
   const players = computed(() => users.value.flatMap((user) => user.players));
+  const sortedPlayers = computed(() => players.value.slice().sort((a, b) => b.total - a.total));
 
   function addUser(userId, userName) {
     const newUser = {
@@ -39,11 +40,15 @@ export const useStore = defineStore('store', () => {
   function addPlayer(userId, playerName, playerId) {
     const user = users.value.find((u) => u.id === userId);
     if (!user) return;
-    user.players.push({
+    let newPlayer = reactive({
       id: playerId,
       name: playerName,
       scores: [],
     });
+    newPlayer.total = computed(() =>
+      newPlayer.scores.reduce((acc, val) => acc + val, 0)
+    );
+    user.players.push(newPlayer);
   }
 
   function renamePlayer(playerId, newName) {
@@ -118,12 +123,7 @@ export const useStore = defineStore('store', () => {
   }
 
   function getWinners() {
-    const playersWithTotals = players.value.map((player) => ({
-      ...player,
-      total: player.scores.reduce((acc, cur) => acc + cur, 0),
-    }));
-
-    const aboveTargetScore = playersWithTotals.filter(
+    const aboveTargetScore = players.value.filter(
       (player) => player.total >= targetScore.value
     );
 
@@ -156,6 +156,7 @@ export const useStore = defineStore('store', () => {
     renameUser,
     currentRound,
     players,
+    sortedPlayers,
     addPlayer,
     renamePlayer,
     removePlayer,

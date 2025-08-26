@@ -1,13 +1,14 @@
 <script setup>
 import { useStore } from '@/stores/store';
 import { storeToRefs } from 'pinia';
-import { ref, nextTick, watch } from 'vue';
+import { ref, nextTick, watch, computed } from 'vue';
 
 const store = useStore();
 
 const { selectPlayer } = store;
 
-const { players, selectedPlayerId, currentRound } = storeToRefs(store);
+const { sortedPlayers, selectedPlayerId, currentRound } = storeToRefs(store);
+
 
 const scrollContainer = ref(null);
 
@@ -33,7 +34,7 @@ watch(currentRound, () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="player in players" @click="selectPlayer(player.id)">
+          <tr v-for="player in sortedPlayers" @click="selectPlayer(player.id)">
             <td class="p-2" :class="(player.id === selectedPlayerId) ? 'bg-gray-300' : ''">{{ player.name }}</td>
           </tr>
         </tbody>
@@ -47,8 +48,9 @@ watch(currentRound, () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="player in players">
-            <td v-for="i in store.currentRound" class="p-2">{{ player.scores[i-1] !== 0 ? (player.scores[i - 1] || '&nbsp') : '0' }}</td>
+          <tr v-for="player in sortedPlayers">
+            <td v-for="i in store.currentRound" class="p-2">{{ player.scores[i - 1] !== 0 ? (player.scores[i - 1] ||
+              '...') : '0' }}</td>
           </tr>
         </tbody>
       </table>
@@ -61,7 +63,7 @@ watch(currentRound, () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="player in players">
+          <tr v-for="player in sortedPlayers">
             <td class="p-2">{{player.scores.reduce((acc, cur) => acc + cur, 0)}}</td>
           </tr>
         </tbody>
